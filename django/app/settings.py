@@ -1,7 +1,7 @@
 import environ
 
 root = environ.Path(__file__) - 1        # one folder back (/django/app/settings.py - 1 = /django)
-env = environ.Env(DEBUG=(bool, False),)  # set default values and casting
+env = environ.Env(DEBUG=(bool, False))  # set default values and casting
 environ.Env.read_env()                   # reading .env file
 
 DEBUG = env('DEBUG')
