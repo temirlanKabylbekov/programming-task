@@ -9,7 +9,7 @@ router = routers.DefaultRouter()
 
 api_v1 = [
     path('nest/', NestingView.as_view()),
-    # path('deposit/', include('deposits.urls')),
+    path('deposit/', include('deposits.urls')),
     path('', include(router.urls)),
 ]
 

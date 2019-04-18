@@ -1,9 +1,7 @@
 from unittest.mock import patch
 
-from rest_framework import status
-
 from app.nest import JsonArrayValidationError
-from app.test import APIClient, ApiUserTestCase
+from app.test import APIClient, ApiUserTestCase, status
 
 
 def test_nest_endpoint_requires_authentication():
