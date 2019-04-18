@@ -20,7 +20,7 @@ class DepositViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            result = nester(Deposit.objects.values(), serializer.validated_data['keys_path'])
+            result = nester(list(Deposit.objects.values()), serializer.validated_data['keys_path'])
             return Response(result)
         except NestValidationError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

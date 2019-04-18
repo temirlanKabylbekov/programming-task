@@ -185,10 +185,13 @@ class TestNester(unittest.TestCase):
 
 
 class TestNesterAsShellCommand(unittest.TestCase):
+    FIXTURES_DIR = '/django/app/tests/fixtures'
+    NEST_SCRIPT_PATH = '/django/app/nest.py'
+
     def test_output_error_in_stderr(self):
         try:
             subprocess.check_output(
-                'cat tests/fixtures/not-json.txt | python nest.py key1 key2',
+                f'cat {self.FIXTURES_DIR}/not-json.txt | python {self.NEST_SCRIPT_PATH} key1 key2',
                 stderr=subprocess.STDOUT, shell=True,
             )
         except subprocess.CalledProcessError as err:
@@ -198,8 +201,8 @@ class TestNesterAsShellCommand(unittest.TestCase):
 
     def test_output_result_in_stdout(self):
         result = subprocess.run(
-            'cat tests/fixtures/test.json | python nest.py currency country city',
+            f'cat {self.FIXTURES_DIR}/test.json | python {self.NEST_SCRIPT_PATH} currency country city',
             stdout=subprocess.PIPE, shell=True,
         )
         stdout_output = json.loads(result.stdout)
-        self.assertDictEqual(stdout_output, json.loads(open('tests/fixtures/test_result.json').read()))
+        self.assertDictEqual(stdout_output, json.loads(open(f'{self.FIXTURES_DIR}/test_result.json').read()))

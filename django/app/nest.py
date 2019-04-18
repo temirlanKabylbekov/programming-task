@@ -99,9 +99,6 @@ def nester(json_array_data: List[dict], nesting_level_list_data: List[str]):
 def main():
     import argparse
     import json
-    import logging
-
-    logger = logging.getLogger(__name__)
 
     parser = argparse.ArgumentParser(description='program that will parse this json, and '
                                                  'return a json serialized nested dictionary '
@@ -114,13 +111,13 @@ def main():
     try:
         data = json.loads(sys.stdin.read())
     except json.JSONDecodeError as e:
-        logger.error(f'something wrong with passed json array: {e}')
+        raise SystemExit(f'something wrong with passed json array: {e}')
 
     try:
         result = nester(data, args.keys)
         print(json.dumps(result, indent=4))  # noqa
     except NestValidationError as e:
-        logger.error(f'validation error: {e}')
+        raise SystemExit(f'validation error: {e}')
 
 
 if __name__ == '__main__':
