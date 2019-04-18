@@ -1,3 +1,5 @@
+import json
+import subprocess
 import unittest  # using this standart test module to have possibility to take out app/nest.py and this tests file from this project and everything will work
 
 from app.nest import (JsonArray,
@@ -180,3 +182,24 @@ class TestNester(unittest.TestCase):
         nesting_key_path_data = ['key']
         with self.assertRaises(JsonArrayValidationError):
             nester(json_array_data, nesting_key_path_data)
+
+
+class TestNesterAsShellCommand(unittest.TestCase):
+    def test_output_error_in_stderr(self):
+        try:
+            subprocess.check_output(
+                'cat tests/fixtures/not-json.txt | python nest.py key1 key2',
+                stderr=subprocess.STDOUT, shell=True,
+            )
+        except subprocess.CalledProcessError as err:
+            self.assertIn(b'something wrong with passed json array', err.output)
+        else:
+            self.fail()
+
+    def test_output_result_in_stdout(self):
+        result = subprocess.run(
+            'cat tests/fixtures/test.json | python nest.py currency country city',
+            stdout=subprocess.PIPE, shell=True,
+        )
+        stdout_output = json.loads(result.stdout)
+        self.assertDictEqual(stdout_output, json.loads(open('tests/fixtures/test_result.json').read()))
