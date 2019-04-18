@@ -17,11 +17,15 @@ class Tree:
         leaf.setdefault(keys_path[-1], []).append(value)
 
 
-class JsonArrayValidationError(Exception):
+class NestValidationError(Exception):
     pass
 
 
-class NestingLevelListValidationError(Exception):
+class JsonArrayValidationError(NestValidationError):
+    pass
+
+
+class NestingLevelListValidationError(NestValidationError):
     pass
 
 
